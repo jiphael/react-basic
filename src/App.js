@@ -1,9 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
+
 function Header(props) {
     console.log('props', props, props.title);
     return <header>
-        <h1><a href="/">{props.title}</a></h1>
+        <h1><a href="/" onClick={(event)=>{
+            event.preventDefault();
+            props.onChangeMode();
+        }}>{props.title}</a></h1>
     </header>
 }
 
@@ -12,7 +16,12 @@ function Nav(props) {
    
     for (let i=0; i<props.topics.length; i++) {
         let t = props.topics[i];
-        lis.push(<li key={t.id}><a href={'/read/'+t.id}>{t.title}</a></li>)
+        lis.push(<li key={t.id}>
+            <a id={t.id} href={'/read/'+t.id} onClick={event=>{
+                event.preventDefault();
+                props.onChangeMode(event.target.id);
+            }}>{t.title} </a>
+        </li>)
 
     }
     return <nav>
@@ -30,14 +39,18 @@ function Article(props) {
 }
 function App() {
     const topics = [
-        {id:1, title:'html',body:'html is ...'},
+        {id:1, title:'html', body:'html is ...'},
          {id:2, title: 'css', body: 'css is ...' },
           {id:3, title: 'js', body: 'js is ...' }
     ]
   return (
       <div>
-          <Header title="WEB"></Header>
-          <Nav topics={topics}></Nav>
+          <Header title="WEB" onChangeMode={()=>{
+              alert('header');
+          }}></Header>
+          <Nav topics={topics} onChangeMode={(id)=>{
+              alert(id);
+          }}></Nav>
           <Article title="Welcome" body="Hellow, WEB"></Article>
 
       </div>
